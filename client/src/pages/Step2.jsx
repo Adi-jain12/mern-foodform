@@ -15,7 +15,7 @@ const Step2 = () => {
 		const fetchDetails = async () => {
 			setLoading(true);
 			try {
-				const response = await fetch('http://localhost:4000/dishes');
+				const response = await fetch('http://localhost:4000/api/v1/meals');
 				if (!response.ok) {
 					throw new Error('Failed to fetch details');
 				}

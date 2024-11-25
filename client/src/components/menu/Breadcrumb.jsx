@@ -10,7 +10,7 @@ const Breadcrumb = () => {
 		{ label: 'Review', path: '/review' },
 	];
 
-	const currentStepIndex = steps.findIndex(
+	const currentIndex = steps.findIndex(
 		(step) => step.path === location.pathname
 	);
 
@@ -18,16 +18,20 @@ const Breadcrumb = () => {
 		<nav className="flex items-center space-x-2 text-gray-700 font-semibold border-2 border-blue-600 py-2 px-4">
 			{steps.map((step, index) => (
 				<div key={index}>
-					<Link
-						to={step.path}
-						className={`${
-							currentStepIndex === index
-								? 'text-blue-600 font-semibold'
-								: 'hover:text-blue-400'
-						}`}
-					>
-						{step.label}
-					</Link>
+					{index <= currentIndex ? (
+						<Link
+							to={step.path}
+							className={`${
+								currentIndex === index
+									? 'text-blue-600 font-semibold'
+									: 'hover:text-blue-400'
+							}`}
+						>
+							{step.label}
+						</Link>
+					) : (
+						<span className="text-gray-400">{step.label}</span>
+					)}
 					{index < steps.length - 1 && <span> / </span>}
 				</div>
 			))}

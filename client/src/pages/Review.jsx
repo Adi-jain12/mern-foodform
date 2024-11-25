@@ -1,7 +1,7 @@
-import NextNavigation from '../components/navigation/NextNavigation';
 import PreviousNavigation from '../components/navigation/PreviousNavigation';
 import ReviewItem from '../components/menu/ReviewItem';
 import { useSelector } from 'react-redux';
+import Button from '../ui/Button';
 
 function Review() {
 	const selectedDishes = useSelector((state) => state.meal.dishes);
@@ -11,12 +11,47 @@ function Review() {
 		(state) => state.meal.selectedRestaurant
 	);
 
-	console.log(selectedMeal);
+	console.log('Order details', {
+		selectedMeal,
+		totalPerson,
+		selectedRestuarant,
+		selectedDishes,
+	});
+
+	const handleSubmit = async () => {
+		const data = {
+			selectedMeal,
+			totalPerson,
+			selectedRestuarant,
+			selectedDishes,
+		};
+
+		try {
+			const response = await fetch('http://localhost:4000/api/v1/order', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(data),
+			});
+
+			if (!response.ok) {
+				throw new Error('Failed to submit data');
+			}
+
+			const result = await response.json();
+
+			window.location.href = '/success';
+		} catch (error) {
+			console.error('Error:', error);
+			alert('There was an error submitting your data.');
+		}
+	};
 
 	return (
 		<div className="space-y-8 px-4 py-6">
 			<div className="flex flex-wrap items-center justify-between gap-2">
-				<h2 className="text-xl font-semibold">Order #fsgsgw status</h2>
+				<h2 className="text-xl font-semibold">Your order details</h2>
 
 				<div className="space-x-2">
 					<span className="rounded-full bg-green-500 px-3 py-1 text-sm font-semibold uppercase tracking-wide text-red-50">
@@ -52,7 +87,9 @@ function Review() {
 
 			<div className="flex justify-between">
 				<PreviousNavigation nextPath="/step3" />
-				<NextNavigation nextPath="/success" altText="Submit" />
+				<Button type="primary" onClick={handleSubmit}>
+					Submit
+				</Button>
 			</div>
 		</div>
 	);

@@ -1,18 +1,27 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { setMealCategory, setNumberOfPeople } from '../menu/mealSlice';
 import NextNavigation from '../navigation/NextNavigation';
+import { useState } from 'react';
 
 const MealForm = () => {
 	const dispatch = useDispatch();
 	const { mealCategory, numberOfPeople } = useSelector((state) => state.meal);
+	const [error, setError] = useState('');
 
 	const handleMealChange = (e) => {
 		dispatch(setMealCategory(e.target.value));
 	};
 
 	const handlePeopleChange = (e) => {
-		const number = parseInt(e.target.value, 10);
-		if (!isNaN(number)) {
+		const value = e.target.value;
+		const number = parseInt(value, 10);
+
+		if (!value) {
+			setError('Number of people is required.');
+		} else if (isNaN(number) || number < 1 || number > 10) {
+			setError('Please enter a valid number between 1 and 10.');
+		} else {
+			setError('');
 			dispatch(setNumberOfPeople(number));
 		}
 	};
@@ -45,7 +54,7 @@ const MealForm = () => {
 					<label className="">Please select the number of people</label>
 					<div className="grow">
 						<input
-							className="input w-full"
+							className={`input w-full ${error ? 'border-red-500' : ''}`}
 							type="number"
 							name="number"
 							min="1"
@@ -54,6 +63,7 @@ const MealForm = () => {
 							onChange={handlePeopleChange}
 							required
 						/>
+						{error && <p className="mt-2 text-sm text-red-500">{error}</p>}
 					</div>
 				</div>
 			</form>
@@ -62,7 +72,7 @@ const MealForm = () => {
 				<div></div>
 				<NextNavigation
 					nextPath="/step2"
-					isDisabled={!mealCategory || !numberOfPeople}
+					isDisabled={!mealCategory || !numberOfPeople || error}
 				/>
 			</div>
 		</div>

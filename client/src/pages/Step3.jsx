@@ -17,7 +17,7 @@ const Step3 = () => {
 		const fetchDetails = async () => {
 			setLoading(true);
 			try {
-				const response = await fetch('http://localhost:4000/dishes');
+				const response = await fetch('http://localhost:4000/api/v1/meals');
 				if (!response.ok) {
 					throw new Error('Failed to fetch details');
 				}
@@ -53,6 +53,10 @@ const Step3 = () => {
 
 	return (
 		<div className="max-w-2xl mx-auto">
+			<label htmlFor="meal" className="">
+				Please select a Dish and no. of servings
+			</label>
+
 			{filteredDishes.length === 0 ? (
 				<p>No dishes available for the selected meal and restaurant.</p>
 			) : (

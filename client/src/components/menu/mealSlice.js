@@ -55,8 +55,6 @@ const mealSlice = createSlice({
 				if (item.quantity === 0) {
 					state.dishes = state.dishes.filter((dish) => dish.dishId !== dishId);
 				}
-			} else {
-				console.error(`Dish with ID ${dishId} not found`);
 			}
 		},
 
